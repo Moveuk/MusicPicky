@@ -22,8 +22,7 @@ public class UserController {
 
     @RequestMapping(value = "/api/users/signup", method = RequestMethod.POST)
     public ResponseDto<?> signup(@RequestBody @Valid UserRequestDto requestDto) {
-        ResponseDto<?> result = userService.createMember(requestDto);
-        return result;
+        return userService.createMember(requestDto);
     }
 
     @RequestMapping(value = "/api/users/login", method = RequestMethod.POST)
