@@ -30,7 +30,7 @@ public class UserService {
     private final TokenProvider tokenProvider;
 
     @Transactional
-    public ResponseDto<?> createMember(UserRequestDto requestDto) {
+    public ResponseDto<?> createUser(UserRequestDto requestDto) {
         if (null != isPresentUser(requestDto.getUsername())) {
             return ResponseDto.fail(ErrorCode.DUPLICATED_USERNAME);
         }
@@ -58,11 +58,11 @@ public class UserService {
     public ResponseDto<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
         User user = isPresentUser(requestDto.getUsername());
         if (null == user) {
-            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND);
+            return ResponseDto.fail(ErrorCode.USER_NOT_FOUND);
         }
 
         if (!user.validatePassword(passwordEncoder, requestDto.getPassword())) {
-            return ResponseDto.fail(ErrorCode.INVALID_MEMBER);
+            return ResponseDto.fail(ErrorCode.INVALID_USER);
         }
 
 //    UsernamePasswordAuthenticationToken authenticationToken =
@@ -110,7 +110,7 @@ public class UserService {
         if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
             return ResponseDto.fail(ErrorCode.INVALID_TOKEN);
         }
-        User user = tokenProvider.getMemberFromAuthentication();
+        User user = tokenProvider.getUserFromAuthentication();
         if (null == user) {
             return ResponseDto.fail(ErrorCode.NOT_LOGIN_STATE);
         }
@@ -120,8 +120,8 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User isPresentUser(String username) {
-        Optional<User> optionalMember = userRepository.findByUsername(username);
-        return optionalMember.orElse(null);
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        return optionalUser.orElse(null);
     }
 
     public void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
