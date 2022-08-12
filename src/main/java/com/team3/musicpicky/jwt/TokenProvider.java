@@ -5,6 +5,7 @@ import com.team3.musicpicky.controller.response.ResponseDto;
 import com.team3.musicpicky.domain.RefreshToken;
 import com.team3.musicpicky.domain.User;
 import com.team3.musicpicky.domain.UserDetailsImpl;
+import com.team3.musicpicky.global.error.ErrorCode;
 import com.team3.musicpicky.repository.RefreshTokenRepository;
 import com.team3.musicpicky.shared.Authority;
 import io.jsonwebtoken.*;
@@ -136,7 +137,7 @@ public class TokenProvider {
   public ResponseDto<?> deleteRefreshToken(User user) {
     RefreshToken refreshToken = isPresentRefreshToken(user);
     if (null == refreshToken) {
-      return ResponseDto.fail("TOKEN_NOT_FOUND", "존재하지 않는 Token 입니다.");
+      return ResponseDto.fail(ErrorCode.TOKEN_NOT_FOUND);
     }
 
     refreshTokenRepository.delete(refreshToken);

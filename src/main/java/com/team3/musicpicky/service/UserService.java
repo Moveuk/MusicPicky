@@ -6,6 +6,7 @@ import com.team3.musicpicky.controller.request.UserRequestDto;
 import com.team3.musicpicky.controller.response.ResponseDto;
 import com.team3.musicpicky.controller.response.UserResponseDto;
 import com.team3.musicpicky.domain.User;
+import com.team3.musicpicky.global.error.ErrorCode;
 import com.team3.musicpicky.jwt.TokenProvider;
 import com.team3.musicpicky.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +32,11 @@ public class UserService {
     @Transactional
     public ResponseDto<?> createMember(UserRequestDto requestDto) {
         if (null != isPresentUser(requestDto.getUsername())) {
-            return ResponseDto.fail("DUPLICATED_NICKNAME",
-                    "중복된 닉네임 입니다.");
+            return ResponseDto.fail(ErrorCode.DUPLICATED_NICKNAME);
         }
 
         if (!requestDto.getPassword().equals(requestDto.getPasswordConfirm())) {
-            return ResponseDto.fail("PASSWORDS_NOT_MATCHED",
-                    "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            return ResponseDto.fail(ErrorCode.PASSWORDS_NOT_MATCHED);
         }
 
         User user = User.builder()
@@ -59,12 +58,11 @@ public class UserService {
     public ResponseDto<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
         User user = isPresentUser(requestDto.getUsername());
         if (null == user) {
-            return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "사용자를 찾을 수 없습니다.");
+            return ResponseDto.fail(ErrorCode.MEMBER_NOT_FOUND);
         }
 
         if (!user.validatePassword(passwordEncoder, requestDto.getPassword())) {
-            return ResponseDto.fail("INVALID_MEMBER", "사용자를 찾을 수 없습니다.");
+            return ResponseDto.fail(ErrorCode.INVALID_MEMBER);
         }
 
 //    UsernamePasswordAuthenticationToken authenticationToken =
@@ -110,12 +108,11 @@ public class UserService {
 
     public ResponseDto<?> logout(HttpServletRequest request) {
         if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
-            return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
+            return ResponseDto.fail(ErrorCode.INVALID_TOKEN);
         }
         User user = tokenProvider.getMemberFromAuthentication();
         if (null == user) {
-            return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "사용자를 찾을 수 없습니다.");
+            return ResponseDto.fail(ErrorCode.NOT_LOGIN_STATE);
         }
 
         return tokenProvider.deleteRefreshToken(user);

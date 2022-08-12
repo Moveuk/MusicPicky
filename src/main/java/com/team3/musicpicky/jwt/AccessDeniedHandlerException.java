@@ -2,6 +2,7 @@ package com.team3.musicpicky.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team3.musicpicky.controller.response.ResponseDto;
+import com.team3.musicpicky.global.error.ErrorCode;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class AccessDeniedHandlerException implements AccessDeniedHandler {
     response.setContentType("application/json;charset=UTF-8");
     response.getWriter().println(
         new ObjectMapper().writeValueAsString(
-            ResponseDto.fail("BAD_REQUEST", "로그인이 필요합니다.")
+            ResponseDto.fail(ErrorCode.LOGIN_REQUIRED)
         )
     );
     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
