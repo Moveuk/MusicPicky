@@ -9,6 +9,12 @@ spring:
     username: sa
     password:
 
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url:
+#    username:
+#    password:
+
   jpa:
     hibernate:
       format_sql: true
