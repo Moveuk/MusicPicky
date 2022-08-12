@@ -32,7 +32,7 @@ public class UserService {
     @Transactional
     public ResponseDto<?> createMember(UserRequestDto requestDto) {
         if (null != isPresentUser(requestDto.getUsername())) {
-            return ResponseDto.fail(ErrorCode.DUPLICATED_NICKNAME);
+            return ResponseDto.fail(ErrorCode.DUPLICATED_USERNAME);
         }
 
         if (!requestDto.getPassword().equals(requestDto.getPasswordConfirm())) {
