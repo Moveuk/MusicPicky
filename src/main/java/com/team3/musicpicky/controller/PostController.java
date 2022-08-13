@@ -23,6 +23,8 @@ public class PostController {
     @PostMapping
     public ResponseEntity<ResponseDto> createPost(CreatePostRequestDto createPostRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
+        createPostRequestDto.setUser(userDetails.getUser());
+
         return postService.createPost(createPostRequestDto);
     }
 
