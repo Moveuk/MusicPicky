@@ -20,12 +20,12 @@ public class UserController {
 
     private final UserService userService;
 
-    @RequestMapping(value = "/api/user/signup", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/users/signup", method = RequestMethod.POST)
     public ResponseDto<?> signup(@RequestBody @Valid UserRequestDto requestDto) {
-        return userService.createMember(requestDto);
+        return userService.createUser(requestDto);
     }
 
-    @RequestMapping(value = "/api/user/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/users/login", method = RequestMethod.POST)
     public ResponseDto<?> login(@RequestBody @Valid LoginRequestDto requestDto,
                                 HttpServletResponse response
     ) {
@@ -37,7 +37,7 @@ public class UserController {
 //    return memberService.reissue(request, response);
 //  }
 
-    @RequestMapping(value = "/api/auth/user/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/auth/users/logout", method = RequestMethod.POST)
     public ResponseDto<?> logout(HttpServletRequest request) {
         return userService.logout(request);
     }

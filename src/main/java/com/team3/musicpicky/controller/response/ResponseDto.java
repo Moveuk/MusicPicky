@@ -12,7 +12,7 @@ public class ResponseDto<T> {
   private ErrorCode errorCode;
 
   public static <T> ResponseDto<T> success(T data) {
-    return new ResponseDto<>(true, data, null);
+    return new ResponseDto<>(true, data, ErrorCode.SUCCESS);
   }
 
   public static <T> ResponseDto<T> fail(ErrorCode errorCode) {

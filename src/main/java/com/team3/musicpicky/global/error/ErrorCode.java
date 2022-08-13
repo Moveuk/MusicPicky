@@ -1,14 +1,21 @@
 package com.team3.musicpicky.global.error;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ErrorCode {
 
+    //Common
+    SUCCESS(200, "SUCCESS", "통신에 성공했습니다."),
+
     //User
-    MEMBER_NOT_FOUND(404, "MEMBER_NOT_FOUND", "해당 유저가 존재하지 않습니다."),
-    INVALID_MEMBER(400, "INVALID_MEMBER", "비밀번호가 일치하지 않습니다"),
-    DUPLICATED_NICKNAME(400, "DUPLICATED_NICKNAME", "중복된 닉네임 입니다."),
+    USER_NOT_FOUND(404, "USER_NOT_FOUND", "해당 유저가 존재하지 않습니다."),
+    INVALID_USER(400, "INVALID_USER", "비밀번호가 일치하지 않습니다"),
+    DUPLICATED_USERNAME(400, "DUPLICATED_USERNAME", "중복된 유저네임 입니다."),
     PASSWORDS_NOT_MATCHED(400, "PASSWORDS_NOT_MATCHED", "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
     LOGIN_REQUIRED(400, "LOGIN_REQUIRED", "로그인이 필요합니다."),
 

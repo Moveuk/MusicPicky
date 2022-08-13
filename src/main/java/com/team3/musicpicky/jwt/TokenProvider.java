@@ -94,7 +94,7 @@ public class TokenProvider {
 //    return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 //  }
 
-  public User getMemberFromAuthentication() {
+  public User getUserFromAuthentication() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null || AnonymousAuthenticationToken.class.
         isAssignableFrom(authentication.getClass())) {
