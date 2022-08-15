@@ -39,7 +39,7 @@ public class PostLikeService {
         if (null == user) {
             return ResponseDto.fail(ErrorCode.INVALID_TOKEN);
         }
-
+        
         Post post = isPresentPost(postId);
         if (null == post) {
             return ResponseDto.fail(ErrorCode.POST_NOT_FOUND);
@@ -100,5 +100,6 @@ public class PostLikeService {
     public Post isPresentPost(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         return optionalPost.orElse(null);
+
     }
 }

@@ -26,3 +26,4 @@ public class PostLike {
     @Column(nullable = false)
     private Boolean checked;
 }
+

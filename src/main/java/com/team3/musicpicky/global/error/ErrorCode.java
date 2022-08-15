@@ -29,6 +29,7 @@ public enum ErrorCode {
 
     NOT_PASS_VALIDATION(400, "NOT_PASS_VALIDATION", "유효성 검사를 통과하지 못했습니다."),
 
+
     //S3
     UPLOAD_FAILED(400, "UPLOAD_FAILED", "S3 Bucket 객체 업로드 실패."),
     DELETE_FAILED(400, "DELETE_FAILED", "S3 Bucket 객체 삭제 실패."),
