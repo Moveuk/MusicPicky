@@ -42,15 +42,3 @@ jwt:
   secret: 4oCYc3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWhhbmdoYWUtYXNzaWdubWVudC1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3Qtc2VjcmV0LWtleeKAmQo=
 
 
-# aws s3
-#cloud:
-#  aws:
-#    credentials:
-#      accessKey: ???
-#      secretKey: ???
-#    s3:
-#      bucket: team03
-#    region:
-#      static: ap-northeast-2
-#    stack:
-#      auto: false
