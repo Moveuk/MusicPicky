@@ -24,6 +24,6 @@ public class PostLike {
     private User user;
 
     @Column(nullable = false)
-    private Boolean isLike;
+    private Boolean isHeart;
 }
 

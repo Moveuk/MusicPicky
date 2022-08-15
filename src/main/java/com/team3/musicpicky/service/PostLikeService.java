@@ -54,14 +54,14 @@ public class PostLikeService {
                 PostLike postLike = PostLike.builder()
                         .post(post)
                         .user(user)
-                        .isLike(true)
+                        .isHeart(true)
                         .build();
 
                 postLikeRepository.save(postLike);
 
 
             } else {
-                postLikeChk.get().setIsLike(true);
+                postLikeChk.get().setIsHeart(true);
             }
 
             post.setLikeCnt(chkLike(post));
@@ -73,7 +73,7 @@ public class PostLikeService {
             );
         }
 
-        postLikeChk.ifPresent(postLike -> postLike.setIsLike(false));
+        postLikeChk.ifPresent(postLike -> postLike.setIsHeart(false));
         post.setLikeCnt(chkLike(post));
         return ResponseDto.success(
                 PostLikeResponseDto.builder()
@@ -84,9 +84,8 @@ public class PostLikeService {
 
 
     public Long chkLike(Post post) {
-        List<PostLike> postLikeList = postLikeRepository.findAllByPostAndIsLike(post, true);
 
-        return (long) postLikeList.size();
+        return postLikeRepository.countAllByPostAndIsHeart(post, true);
     }
 
     @Transactional
