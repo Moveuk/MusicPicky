@@ -38,7 +38,7 @@ public class PostResponseDto {
     @NotBlank
     private String videoUrl;
 
-//    private String countLike; // 좋아요 기능 추가 예정
+    private Long likeCnt;
 
     @Builder
     public PostResponseDto(Post post) {
@@ -50,5 +50,6 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.imageUrl = post.getImageUrl();
         this.videoUrl = post.getVideoUrl();
+        this.likeCnt = post.getLikeCnt();
     }
 }
