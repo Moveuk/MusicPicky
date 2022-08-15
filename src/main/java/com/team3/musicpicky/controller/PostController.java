@@ -6,11 +6,10 @@ import com.team3.musicpicky.domain.UserDetailsImpl;
 import com.team3.musicpicky.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequestMapping(path = "/api/posts")
@@ -25,7 +24,15 @@ public class PostController {
 
         createPostRequestDto.setUser(userDetails.getUser());
 
-        return postService.createPost(createPostRequestDto);
+        return new ResponseEntity<>(
+                ResponseDto.success(postService.createPost(createPostRequestDto)), HttpStatus.valueOf(HttpStatus.OK.value()));
+    }
+
+
+    @GetMapping(path = "/{postId}")
+    public ResponseEntity<ResponseDto> getPost(@PathVariable Long postId) {
+        return new ResponseEntity<>(
+                ResponseDto.success(postService.getPost(postId)), HttpStatus.valueOf(HttpStatus.OK.value()));
     }
 
 }
