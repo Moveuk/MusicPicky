@@ -64,7 +64,7 @@ public class PostLikeService {
                 postLikeChk.get().setIsLike(true);
             }
 
-            post.setCountLike(chkLike(post));
+            post.setLikeCnt(chkLike(post));
 
             return ResponseDto.success(
                     PostLikeResponseDto.builder()
@@ -74,7 +74,7 @@ public class PostLikeService {
         }
 
         postLikeChk.ifPresent(postLike -> postLike.setIsLike(false));
-        post.setCountLike(chkLike(post));
+        post.setLikeCnt(chkLike(post));
         return ResponseDto.success(
                 PostLikeResponseDto.builder()
                         .isLike(false)
@@ -84,7 +84,7 @@ public class PostLikeService {
 
 
     public Long chkLike(Post post) {
-        List<PostLike> postLikeList = postLikeRepository.findAllByPostAndChecked(post, true);
+        List<PostLike> postLikeList = postLikeRepository.findAllByPostAndIsLike(post, true);
 
         return (long) postLikeList.size();
     }

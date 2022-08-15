@@ -39,7 +39,7 @@ public class PostService {
                                 .content(createPostRequestDto.getContent())
                                 .imageUrl(imageUrl)
                                 .videoUrl(createPostRequestDto.getVideoUrl())
-                                .countLike(0L)
+                                .likeCnt(0L)
                                 .build());
     }
 

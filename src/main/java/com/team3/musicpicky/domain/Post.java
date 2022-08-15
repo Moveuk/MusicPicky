@@ -39,7 +39,7 @@ public class Post extends Timestamped{
     private String videoUrl;
 
     @Column(nullable = false)
-    private Long countLike;
+    private Long likeCnt;
 
     @Getter
     @AllArgsConstructor
