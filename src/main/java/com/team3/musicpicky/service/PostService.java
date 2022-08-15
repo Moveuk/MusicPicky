@@ -8,9 +8,12 @@ import com.team3.musicpicky.global.error.ErrorCode;
 import com.team3.musicpicky.repository.PostRepository;
 import com.team3.musicpicky.s3.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +46,21 @@ public class PostService {
         // 포스트 아이디로 조회.
         Post post = postRepository.findById(postId).orElseThrow(()-> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
         return PostResponseDto.builder()
-                        .post(post)
-                        .imageUrl(post.getImageUrl()).build();
+                .post(post)
+                .build();
+    }
+
+    public List<PostResponseDto> getPostList() {
+        // 모든 포스트 목록 조회.
+        List<PostResponseDto> postResponseDtoList = postRepository.findAll(Sort.by(Sort.Direction.DESC,"postId"))
+                .stream().map(post -> PostResponseDto.builder().post(post).build()).collect(Collectors.toList());
+        return postResponseDtoList;
+    }
+
+    public List<PostResponseDto> getPostListByGenre(Post.Genre genre) {
+        // 포스트 장르를 기준으로 목록 조회.
+        List<PostResponseDto> postResponseDtoList = postRepository.findAllByGenreOrderByPostIdDesc(genre).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND))
+                .stream().map(post -> PostResponseDto.builder().post(post).build()).collect(Collectors.toList());
+        return postResponseDtoList;
     }
 }

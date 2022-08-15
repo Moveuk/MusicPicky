@@ -41,14 +41,14 @@ public class PostResponseDto {
 //    private String countLike; // 좋아요 기능 추가 예정
 
     @Builder
-    public PostResponseDto(Post post, String imageUrl) {
+    public PostResponseDto(Post post) {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.user = post.getUser();
         this.artist = post.getArtist();
         this.genre = post.getGenre();
         this.content = post.getContent();
-        this.imageUrl = imageUrl;
+        this.imageUrl = post.getImageUrl();
         this.videoUrl = post.getVideoUrl();
     }
 }
