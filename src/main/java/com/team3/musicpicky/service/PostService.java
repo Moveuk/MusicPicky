@@ -69,6 +69,10 @@ public class PostService {
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
 
+        if(!updatePostRequestDto.getUser().getUsername().equals(post.getUser().getUsername())){
+            throw new InvalidValueException(ErrorCode.POST_UNAUTHORIZED);
+        }
+
         //새로운 사진이 들어왔으면 새로운 파일을 넣고 기존 파일을 삭제함.
         if (Objects.nonNull(updatePostRequestDto.getImageFile())) {
             // 새로운 이미지 s3 버킷 저장
