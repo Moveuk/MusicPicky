@@ -48,8 +48,7 @@ public class Post extends Timestamped{
         BALLAD("Ballad"),
         ROCK("Rock"),
         DANCE("Dance"),
-        ETC("Etc"),
-        ;
+        ETC("Etc");
 
         private String genre;
     }
