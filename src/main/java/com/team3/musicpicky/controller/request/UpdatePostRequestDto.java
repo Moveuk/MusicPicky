@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class CreatePostRequestDto {
+public class UpdatePostRequestDto {
 
     @NotBlank
     private String title;
@@ -26,20 +26,8 @@ public class CreatePostRequestDto {
     @NotBlank
     private String content;
 
-    @NotBlank
     private MultipartFile imageFile;
 
     @NotBlank
     private String videoUrl;
-
-    public Post toPost(String imageUrl) {
-        return Post.builder()
-                .title(title)
-                .artist(artist)
-                .genre(genre)
-                .content(content)
-                .imageUrl(imageUrl)
-                .videoUrl(videoUrl)
-                .build();
-    }
 }
