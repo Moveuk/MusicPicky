@@ -17,7 +17,9 @@ public enum ErrorCode {
     TOKEN_NOT_FOUND(400, "TOKEN_NOT_FOUND", "존재하지 않는 Token 입니다."),
     NOT_LOGIN_STATE(400, "NOT_LOGIN_STATE", "로그인 상태가 아닙니다."),
 
-    NOT_PASS_VALIDATION(400, "NOT_PASS_VALIDATION", "유효성 검사를 통과하지 못했습니다.");
+    NOT_PASS_VALIDATION(400, "NOT_PASS_VALIDATION", "유효성 검사를 통과하지 못했습니다."),
+
+    POST_NOT_FOUND(404, "POST_NOT_FOUND", "게시글이 존재하지 않습니다.");
 
     private final int status;
     private final String code;
