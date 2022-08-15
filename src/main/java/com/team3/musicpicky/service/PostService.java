@@ -96,4 +96,7 @@ public class PostService {
 
         return post;
     }
+
+    public Object deletePost(Long postId) {
+    }
 }
