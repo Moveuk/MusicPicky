@@ -39,7 +39,7 @@ public class PostLikeService {
         if (null == user) {
             return ResponseDto.fail(ErrorCode.INVALID_TOKEN);
         }
-        
+
         Post post = isPresentPost(postId);
         if (null == post) {
             return ResponseDto.fail(ErrorCode.POST_NOT_FOUND);
@@ -54,29 +54,30 @@ public class PostLikeService {
                 PostLike postLike = PostLike.builder()
                         .post(post)
                         .user(user)
-                        .checked(true)
+                        .isLike(true)
                         .build();
 
                 postLikeRepository.save(postLike);
 
+
             } else {
-                postLikeChk.get().setChecked(true);
+                postLikeChk.get().setIsLike(true);
             }
 
             post.setCountLike(chkLike(post));
 
             return ResponseDto.success(
                     PostLikeResponseDto.builder()
-                            .isChecked(true)
+                            .isLike(true)
                             .build()
             );
-
         }
-        postLikeChk.ifPresent(postLike -> postLike.setChecked(false));
 
+        postLikeChk.ifPresent(postLike -> postLike.setIsLike(false));
+        post.setCountLike(chkLike(post));
         return ResponseDto.success(
                 PostLikeResponseDto.builder()
-                        .isChecked(false)
+                        .isLike(false)
                         .build()
         );
     }

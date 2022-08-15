@@ -7,6 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostLikeResponseDto {
-    private Boolean isChecked;
+    private Boolean isLike;
 
 }
