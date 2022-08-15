@@ -21,6 +21,7 @@ public enum ErrorCode {
 
     //Post
     POST_NOT_FOUND(400, "POST_NOT_FOUND", "존재하지 않는 게시글입니다."),
+    POST_UNAUTHORIZED(401, "POST_UNAUTHORIZED", "게시글에 대한 권한이 없습니다."),
 
     //Token
     INVALID_TOKEN(400, "INVALID_TOKEN", "Token이 유효하지 않습니다."),
