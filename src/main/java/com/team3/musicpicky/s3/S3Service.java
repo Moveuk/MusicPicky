@@ -55,18 +55,15 @@ public class S3Service {
 
         String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename().toLowerCase();
         try {
-            // 확장자 점검
             if (!(fileName.endsWith(".bmp") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"))) {
                 throw new InvalidValueException(ErrorCode.INVALID_IMAGE_FILE_EXTENSION);
             }
-            // 파일 업로드
             s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
             throw new BusinessException(ErrorCode.UPLOAD_FAILED);
         }
-        ///url string 리턴
-        return s3Client.getUrl(bucket, fileName).toString();
+        return s3Client.getUrl(bucket, fileName).toString();    ///url string 리턴
     }
 
     public List<DeleteObjectsRequest.KeyVersion> getImageKeys() {
@@ -80,14 +77,6 @@ public class S3Service {
     }
 
     public void deleteObject(String sourceKey) {
-        s3Client.deleteObject(bucket, sourceKey);
-    }
-
-    //DB에 있는 값을 그대로 사용하기 위하여 새로운 메소드 생성
-    public void deleteObjectByImageUrl(String imageUrl) {
-        //split을 통해 나누고 나눈 length에서 1을 빼서 마지막 값(파일명)을 사용함.
-        String sourceKey = imageUrl.split("/")[imageUrl.split("/").length - 1];
-        //소스키로 s3에서 삭제
         s3Client.deleteObject(bucket, sourceKey);
     }
 

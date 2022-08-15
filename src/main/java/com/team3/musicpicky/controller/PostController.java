@@ -1,7 +1,6 @@
 package com.team3.musicpicky.controller;
 
 import com.team3.musicpicky.controller.request.CreatePostRequestDto;
-import com.team3.musicpicky.controller.request.UpdatePostRequestDto;
 import com.team3.musicpicky.controller.response.ResponseDto;
 import com.team3.musicpicky.domain.Post;
 import com.team3.musicpicky.domain.UserDetailsImpl;
@@ -46,13 +45,6 @@ public class PostController {
     public ResponseEntity<ResponseDto> getPostListByGenre(@RequestParam Post.Genre genre) {
         return new ResponseEntity<>(
                 ResponseDto.success(postService.getPostListByGenre(genre)), HttpStatus.valueOf(HttpStatus.OK.value()));
-    }
-
-    @PutMapping(path = "/{postId}")
-    public ResponseEntity<ResponseDto> updatePost(@PathVariable Long postId, UpdatePostRequestDto updatePostRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        updatePostRequestDto.setUser(userDetails.getUser());
-        return new ResponseEntity<>(
-                ResponseDto.success(postService.updatePost(postId, updatePostRequestDto)), HttpStatus.valueOf(HttpStatus.OK.value()));
     }
 
 }

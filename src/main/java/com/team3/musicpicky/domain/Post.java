@@ -52,14 +52,4 @@ public class Post extends Timestamped{
 
         private String genre;
     }
-
-    public void update(String title, User user, String artist, Genre genre, String content, String imageUrl, String videoUrl) {
-        this.title = title;
-        this.user = user;
-        this.artist = artist;
-        this.genre = genre;
-        this.content = content;
-        this.imageUrl = imageUrl;
-        this.videoUrl = videoUrl;
-    }
 }
