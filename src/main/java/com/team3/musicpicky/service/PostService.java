@@ -4,6 +4,7 @@ import com.team3.musicpicky.controller.request.CreatePostRequestDto;
 import com.team3.musicpicky.controller.request.UpdatePostRequestDto;
 import com.team3.musicpicky.controller.response.PostResponseDto;
 import com.team3.musicpicky.domain.Post;
+import com.team3.musicpicky.domain.UserDetailsImpl;
 import com.team3.musicpicky.exception.InvalidValueException;
 import com.team3.musicpicky.global.error.ErrorCode;
 import com.team3.musicpicky.repository.PostRepository;
@@ -38,7 +39,7 @@ public class PostService {
 
     public PostResponseDto getPost(Long postId) {
         // 포스트 아이디로 조회.
-        Post post = postRepository.findById(postId).orElseThrow(()-> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
         return PostResponseDto.builder()
                 .post(post)
                 .build();
@@ -46,7 +47,7 @@ public class PostService {
 
     public List<PostResponseDto> getPostList() {
         // 모든 포스트 목록 조회.
-        return postRepository.findAll(Sort.by(Sort.Direction.DESC,"postId"))
+        return postRepository.findAll(Sort.by(Sort.Direction.DESC, "postId"))
                 .stream()
                 .map(post -> PostResponseDto.builder().post(post).build())
                 .collect(Collectors.toList());
@@ -69,7 +70,8 @@ public class PostService {
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
 
-        if(!updatePostRequestDto.getUser().getUsername().equals(post.getUser().getUsername())){
+        //수정 권한이 있는지 확인하기 위해 조회한 username과 userDetails의 username을 대조.
+        if (!updatePostRequestDto.getUser().getUsername().equals(post.getUser().getUsername())) {
             throw new InvalidValueException(ErrorCode.POST_UNAUTHORIZED);
         }
 
@@ -97,6 +99,17 @@ public class PostService {
         return post;
     }
 
-    public Object deletePost(Long postId) {
+    @Transactional
+    public String deletePost(Long postId, UserDetailsImpl userDetails) {
+        // 삭제할 post 조회.
+        Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
+        String username = post.getUser().getUsername();
+        //삭제 권한이 있는지 확인하기 위해 조회한 username과 userDetails의 username을 대조.
+        if (!userDetails.getUser().getUsername().equals(username)) {
+            throw new InvalidValueException(ErrorCode.POST_UNAUTHORIZED);
+        }
+        //권한이 있다면 삭제
+        postRepository.deleteById(postId);
+        return "<" + post.getTitle() + "> 게시글이 삭제되었습니다.";
     }
 }

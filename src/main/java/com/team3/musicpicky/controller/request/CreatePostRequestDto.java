@@ -35,6 +35,7 @@ public class CreatePostRequestDto {
     public Post toPost(String imageUrl) {
         return Post.builder()
                 .title(title)
+                .user(user)
                 .artist(artist)
                 .genre(genre)
                 .content(content)
