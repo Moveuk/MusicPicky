@@ -9,6 +9,7 @@ import com.team3.musicpicky.domain.User;
 import com.team3.musicpicky.global.error.ErrorCode;
 import com.team3.musicpicky.jwt.TokenProvider;
 import com.team3.musicpicky.repository.PostLikeRepository;
+import com.team3.musicpicky.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ import java.util.Optional;
 public class PostLikeService {
     private final PostLikeRepository postLikeRepository;
     private final TokenProvider tokenProvider;
-    private final PostService postService;
+    private final PostRepository postRepository;
 
     @Transactional
     public ResponseDto<?> like(Long postId, PostLikeRequestDto requestDto,
@@ -39,48 +40,50 @@ public class PostLikeService {
             return ResponseDto.fail(ErrorCode.INVALID_TOKEN);
         }
 
-        Post post = postService.isPresentPost(requestDto.getPostId());
+        Post post = isPresentPost(postId);
         if (null == post) {
             return ResponseDto.fail(ErrorCode.POST_NOT_FOUND);
         }
 
-        Optional<PostLike> postLikeChk = postLikeRepository.findByPostIdAndUserId(postId, user.getUserId());
+
+        Optional<PostLike> postLikeChk = postLikeRepository.findByPostAndUser(post, user);
 
         if (requestDto.getUid() == 0) {
 
-            if (postLikeChk.isPresent()) {
-                postLikeChk.get().setIsChecked(true);
+            if (postLikeChk.isEmpty()) {
+                PostLike postLike = PostLike.builder()
+                        .post(post)
+                        .user(user)
+                        .checked(true)
+                        .build();
+
+                postLikeRepository.save(postLike);
+
+            } else {
+                postLikeChk.get().setChecked(true);
             }
 
-            PostLike postLike = PostLike.builder()
-                    .post(post)
-                    .user(user)
-                    .IsChecked(true)
-                    .build();
-
-            postLikeRepository.save(postLike);
-
-            post.setCountLike(chkLike(postId));
+            post.setCountLike(chkLike(post));
 
             return ResponseDto.success(
                     PostLikeResponseDto.builder()
-                            .isChecked(postLikeChk.get().getIsChecked())
+                            .isChecked(true)
                             .build()
             );
 
         }
+        postLikeChk.ifPresent(postLike -> postLike.setChecked(false));
 
-        postLikeChk.get().setIsChecked(false);
         return ResponseDto.success(
                 PostLikeResponseDto.builder()
-                        .isChecked(postLikeChk.get().getIsChecked())
+                        .isChecked(false)
                         .build()
         );
     }
 
 
-    public Long chkLike(Long postId) {
-        List<PostLike> postLikeList = postLikeRepository.findAllByIdAndIsChecked(postId, true);
+    public Long chkLike(Post post) {
+        List<PostLike> postLikeList = postLikeRepository.findAllByPostAndChecked(post, true);
 
         return (long) postLikeList.size();
     }
@@ -90,6 +93,12 @@ public class PostLikeService {
         if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
             return null;
         }
-        return tokenProvider.getMemberFromAuthentication();
+        return tokenProvider.getUserFromAuthentication();
+    }
+
+    @Transactional(readOnly = true)
+    public Post isPresentPost(Long postId) {
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        return optionalPost.orElse(null);
     }
 }

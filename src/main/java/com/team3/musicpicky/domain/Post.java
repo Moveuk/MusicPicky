@@ -1,15 +1,12 @@
 package com.team3.musicpicky.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Builder
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post extends Timestamped{
@@ -40,6 +37,9 @@ public class Post extends Timestamped{
 
     @Column(nullable = false)
     private String videoUrl;
+
+    @Column(nullable = false)
+    private Long countLike;
 
     @Getter
     @AllArgsConstructor

@@ -54,3 +54,16 @@ jwt:
 #      static: ap-northeast-2
 #    stack:
 #      auto: false
+
+# aws s3
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIASIYI5AZASXYVUTON
+      secretKey: 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
+    s3:
+      bucket: ldubucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

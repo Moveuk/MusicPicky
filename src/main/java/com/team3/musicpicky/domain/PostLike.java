@@ -23,6 +23,6 @@ public class PostLike {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    @Column
-    private Boolean IsChecked;
+    @Column(nullable = false)
+    private Boolean checked;
 }
