@@ -55,4 +55,10 @@ public class PostController {
                 ResponseDto.success(postService.updatePost(postId, updatePostRequestDto)), HttpStatus.valueOf(HttpStatus.OK.value()));
     }
 
+    @DeleteMapping(path = "/{postId}")
+    public ResponseEntity<ResponseDto> deletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return new ResponseEntity<>(
+                ResponseDto.success(postService.deletePost(postId, userDetails)), HttpStatus.valueOf(HttpStatus.OK.value()));
+    }
+
 }
