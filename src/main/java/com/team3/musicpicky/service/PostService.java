@@ -33,7 +33,7 @@ public class PostService {
         }
 
         // Dto 팩토리 메서드로 리팩토링
-        return postRepository.save(createPostRequestDto.postFrom(imageUrl));
+        return postRepository.save(createPostRequestDto.toPost(imageUrl));
     }
 
     public PostResponseDto getPost(Long postId) {

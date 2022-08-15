@@ -32,7 +32,7 @@ public class CreatePostRequestDto {
     @NotBlank
     private String videoUrl;
 
-    public Post postFrom(String imageUrl) {
+    public Post toPost(String imageUrl) {
         return Post.builder()
                 .title(title)
                 .artist(artist)
