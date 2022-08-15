@@ -110,6 +110,8 @@ public class PostService {
         }
         //권한이 있다면 삭제
         postRepository.deleteById(postId);
+        //s3 버킷에서 기존 사진 삭제
+        s3Service.deleteObjectByImageUrl(post.getImageUrl());
         return "<" + post.getTitle() + "> 게시글이 삭제되었습니다.";
     }
 }
