@@ -32,6 +32,8 @@ public class CreatePostRequestDto {
     @NotBlank
     private String videoUrl;
 
+    private Long likeCnt;
+
     public Post toPost(String imageUrl) {
         return Post.builder()
                 .title(title)
@@ -41,6 +43,7 @@ public class CreatePostRequestDto {
                 .content(content)
                 .imageUrl(imageUrl)
                 .videoUrl(videoUrl)
+                .likeCnt(0L)
                 .build();
     }
 }

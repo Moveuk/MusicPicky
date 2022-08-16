@@ -41,6 +41,9 @@ public class Post extends Timestamped{
     @Column(nullable = false)
     private String videoUrl;
 
+    @Column(nullable = false)
+    private Long likeCnt;
+
     @Getter
     @AllArgsConstructor
     public enum Genre {
@@ -61,5 +64,9 @@ public class Post extends Timestamped{
         this.content = content;
         this.imageUrl = imageUrl;
         this.videoUrl = videoUrl;
+    }
+
+    public void count(Long likeCnt) {
+        this.likeCnt = likeCnt;
     }
 }
