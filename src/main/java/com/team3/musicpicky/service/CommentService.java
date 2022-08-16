@@ -10,6 +10,8 @@ import com.team3.musicpicky.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -24,5 +26,19 @@ public class CommentService {
                         .user(commentRequestDto.getUser())
                         .comment(commentRequestDto.getComment())
                         .build());
+    }
+
+    public Comment updateComment(CommentRequestDto commentRequestDto, Long postId, Long commentId, Long userId) {
+        Post post = postRepository.findById(postId).orElseThrow(()-> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new InvalidValueException(ErrorCode.COMMENT_NOT_FOUND));
+
+        Long writerId = comment.getUser().getUserId();
+
+        if (Objects.equals(writerId, userId)) {
+            comment.updateComment(commentRequestDto);
+        }else{
+            throw new InvalidValueException(ErrorCode.COMMENT_UNAUTHORIZED);
+        }
+        return comment;
     }
 }

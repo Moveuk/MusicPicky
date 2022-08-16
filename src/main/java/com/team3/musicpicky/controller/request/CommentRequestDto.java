@@ -14,4 +14,6 @@ public class CommentRequestDto {
 
     @NotBlank
     private String comment;
+
+    public String getComment() {return this.comment;}
 }
