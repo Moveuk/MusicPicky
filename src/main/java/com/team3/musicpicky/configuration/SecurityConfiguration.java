@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -64,8 +65,10 @@ public class SecurityConfiguration {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/api/users/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()  //h2-console 해제
+                .antMatchers("/api/users/**").permitAll()   //signup, login 해제
+                .antMatchers(HttpMethod.GET, "/api/posts").permitAll()  //게시글 목록 조회 해제
+                .antMatchers(HttpMethod.GET, "/api/posts/**").permitAll()   //게시글 조회 해제
                 .anyRequest().authenticated()
 
                 .and()
