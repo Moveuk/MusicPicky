@@ -13,5 +13,5 @@ public interface PostLikeRepository extends CrudRepository<PostLike, Long> {
 
     Optional<PostLike> findByPostAndUser(Post post, User user);
     Long countAllByPostAndIsHeart(Post post, Boolean isLike);
-
+    Optional<List<PostLike>> findAllByUserAndIsHeart(User user, Boolean isHeart);
 }
