@@ -1,6 +1,7 @@
 package com.team3.musicpicky.controller;
 
 import com.team3.musicpicky.controller.response.ResponseDto;
+import com.team3.musicpicky.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

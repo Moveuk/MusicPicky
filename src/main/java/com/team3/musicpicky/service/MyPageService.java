@@ -2,11 +2,16 @@ package com.team3.musicpicky.service;
 
 import com.team3.musicpicky.controller.response.ResponseDto;
 import com.team3.musicpicky.domain.Post;
+import com.team3.musicpicky.domain.PostLike;
 import com.team3.musicpicky.domain.User;
+import com.team3.musicpicky.exception.InvalidValueException;
 import com.team3.musicpicky.global.error.ErrorCode;
+import com.team3.musicpicky.jwt.TokenProvider;
+import com.team3.musicpicky.repository.PostLikeRepository;
 import com.team3.musicpicky.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -17,8 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MyPageService {
 
+    private final TokenProvider tokenProvider;
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
+//    private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
 
     public ResponseDto<?> getMyPage(HttpServletRequest request) {
@@ -33,23 +39,20 @@ public class MyPageService {
         if (null == user) {
             return ResponseDto.fail(ErrorCode.INVALID_TOKEN);
         }
-        String username = user.getUsername();
 
-        List<Post> PostList = new ArrayList<>();
-        List<Comment> CommentList = new ArrayList<>();
+        List<Post> PostList = postRepository.findAllByUser(user).orElseThrow(
+                ()-> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
+
+//        List<Comment> CommentList = commentRepository.findAllByUsername(username);
+
+        List<PostLike> postLikeList = postLikeRepository.findAllByUserAndIsHeart(user, true)
+                .orElseThrow(()-> new InvalidValueException(ErrorCode.POST_NOT_FOUND) );
+
+        System.out.println(postLikeList.get(0).getPost());
+
         List<Post> LikedPostList = new ArrayList<>();
-
-        PostList = postRepository.findAllByUsername(username);
-        CommentList = commentRepository.findAllByUsername(username);
-
-        List<Long> postLikeList = postLikeRepository.findAllByUser(user);
-
         for(PostLike postLike : postLikeList) {
-            Long postId = postLike.getPost();
-
-            Post post = postRepository.findById(postId).orElseThrow(
-                    ()-> new IllegalArgumentException("게시글이 없습니다.")
-            );
+            Post post = postLike.getPost();
 
             LikedPostList.add(post);
         }
@@ -57,10 +60,18 @@ public class MyPageService {
         HashMap<String,List<?>> MyPageDto = new HashMap<>();
 
         MyPageDto.put("PostList", PostList);
-        MyPageDto.put("CommentList", CommentList);
+//        MyPageDto.put("CommentList", CommentList);
         MyPageDto.put("LikedPostList", LikedPostList);
 
         return ResponseDto.success(MyPageDto);
+    }
+
+    @Transactional
+    public User validateUser(HttpServletRequest request) {
+        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
+            return null;
+        }
+        return tokenProvider.getUserFromAuthentication();
     }
 
 }
