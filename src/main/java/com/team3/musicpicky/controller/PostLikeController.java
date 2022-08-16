@@ -19,7 +19,7 @@ public class PostLikeController {
 
     private final PostLikeService postLikeService;
 
-    @PostMapping("/api/like/{postId}")
+    @PostMapping("/api/likes/{postId}")
     public ResponseDto<?> like(@PathVariable Long postId, @RequestBody PostLikeRequestDto requestDto,
                                HttpServletRequest request) {
 
