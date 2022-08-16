@@ -21,6 +21,11 @@ public class Comment extends Timestamped{
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_postId")
+    private Post post;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_userId")
     private User user;
 
