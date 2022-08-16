@@ -41,4 +41,15 @@ public class CommentController {
                 ResponseDto.success(commentService.updateComment(commentRequestDto, postId, commentId, userId)),
                 HttpStatus.valueOf(HttpStatus.OK.value()));
     }
+
+    @DeleteMapping({"/api/posts/{postId}/comments/{commentId}"})
+    public ResponseEntity<ResponseDto> deleteComment(@PathVariable("postId") Long postId,
+                                                     @PathVariable("commentId") Long commentId,
+                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        Long userId = userDetails.getUser().getUserId();
+
+        return new ResponseEntity<>(
+                ResponseDto.success(commentService.deleteComment(postId, commentId, userId)), HttpStatus.valueOf(HttpStatus.OK.value()));
+    }
 }

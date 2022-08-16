@@ -1,16 +1,23 @@
 package com.team3.musicpicky.service;
 
 import com.team3.musicpicky.controller.request.CommentRequestDto;
+import com.team3.musicpicky.controller.response.CommentResponseDto;
+import com.team3.musicpicky.controller.response.PostResponseDto;
 import com.team3.musicpicky.domain.Comment;
 import com.team3.musicpicky.domain.Post;
+import com.team3.musicpicky.domain.UserDetailsImpl;
 import com.team3.musicpicky.exception.InvalidValueException;
 import com.team3.musicpicky.global.error.ErrorCode;
 import com.team3.musicpicky.repository.CommentRepository;
 import com.team3.musicpicky.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +47,18 @@ public class CommentService {
             throw new InvalidValueException(ErrorCode.COMMENT_UNAUTHORIZED);
         }
         return comment;
+    }
+    public String deleteComment(Long postId, Long commentId, Long userId) {
+        Post post = postRepository.findById(postId).orElseThrow(()-> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new InvalidValueException(ErrorCode.COMMENT_NOT_FOUND));
+
+        Long writerId = comment.getUser().getUserId();
+
+        if (Objects.equals(writerId, userId)) {
+            commentRepository.deleteById(commentId);
+        }else{
+            throw new InvalidValueException(ErrorCode.COMMENT_UNAUTHORIZED);
+        }
+        return "댓글 삭제";
     }
 }
