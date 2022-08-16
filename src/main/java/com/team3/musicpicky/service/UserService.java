@@ -76,6 +76,7 @@ public class UserService {
                 UserResponseDto.builder()
                         .id(user.getUserId())
                         .username(user.getUsername())
+                        .token(tokenDto)
                         .createdAt(user.getCreatedAt())
                         .modifiedAt(user.getModifiedAt())
                         .build()
