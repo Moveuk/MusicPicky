@@ -20,6 +20,7 @@ public class CommentDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedAt;
 
+    @Builder
     public CommentDto(Comment commentAs, UserDto userDto) {
         this.commentId = commentAs.getCommentId();
         this.userDto = userDto;
