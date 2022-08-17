@@ -15,6 +15,7 @@ public class CommentDto {
     private Long commentId;
     private UserDto userDto;
     private String comment;
+    private Long postId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -26,5 +27,6 @@ public class CommentDto {
         this.comment = commentAs.getComment();
         this.createdAt = commentAs.getCreatedAt();
         this.modifiedAt = commentAs.getModifiedAt();
+        this.postId = commentAs.getPost().getPostId();
     }
 }
