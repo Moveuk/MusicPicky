@@ -1,6 +1,7 @@
 package com.team3.musicpicky.service;
 
 import com.team3.musicpicky.controller.Dto.CommentDto;
+import com.team3.musicpicky.controller.Dto.MyPageCommentDto;
 import com.team3.musicpicky.controller.Dto.PostDto;
 import com.team3.musicpicky.controller.Dto.UserDto;
 import com.team3.musicpicky.controller.response.ResponseDto;
@@ -45,7 +46,7 @@ public class MyPageService {
         }
 
         List<PostDto> PostList = getPostDto(user);
-        List<CommentDto> CommentList = getCommentDto(user);
+        List<MyPageCommentDto> CommentList = getMyPageCommentDto(user);
         List<PostDto> LikedPostList = getLikedPostDto(user);
 
         HashMap<String, List<?>> myPage = new HashMap<>();
@@ -97,13 +98,13 @@ public class MyPageService {
 
     //내가 작성한 댓글 dto로 받아오기
     @Transactional
-    public List<CommentDto> getCommentDto(User user) {
+    public List<MyPageCommentDto> getMyPageCommentDto(User user) {
         UserDto userDto = new UserDto(user);
         List<Comment> CommentList = commentRepository.findAllByUser(user).orElseThrow(
                 ()-> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
 
         return  CommentList.stream()
-                .map(comment -> new CommentDto(comment, userDto))
+                .map(comment -> new MyPageCommentDto(comment, userDto))
                 .collect(Collectors.toList());
     }
 
