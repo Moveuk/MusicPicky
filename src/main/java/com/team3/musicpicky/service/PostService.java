@@ -48,28 +48,26 @@ public class PostService {
     public PostResponseDto getPost(Long postId, HttpServletRequest request) {
          User user = validateUser(request);
 
-
+        //로그인 정보가 없을때 (Refresh-Token == null) uid값 설정
         if (user == null) {
              Long uid = -1L;
              Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
 
              return PostResponseDto.builder()
                      .post(post)
+                     .uid(uid)
                      .build();
         }
 
         // 포스트 아이디로 조회.
         Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
-        Optional<PostLike> postLike = postLikeRepository.findByPostAndUser(post, user);
 
-        if (postLike.isEmpty() || !postLike.get().getIsHeart()){
-            Long uid = 0L;
-        } else {
-            Long uid = 1L;
-        }
-        Long uid = uidCheck(user);
+        //로그인 정보가 있을 때 (Refresh-Token != null) 좋아요 했는지 확인해 uid값 설정
+        Long uid = uidCheck(post, user);
+
         return PostResponseDto.builder()
                 .post(post)
+                .uid(uid)
                 .build();
     }
 
@@ -151,8 +149,14 @@ public class PostService {
     }
 
     @Transactional
-    public Long uidCheck(User user) {
-
+    public Long uidCheck(Post post, User user) {
+        Optional<PostLike> postLike = postLikeRepository.findByPostAndUser(post, user);
+        Long uid;
+        if (postLike.isEmpty() || !postLike.get().getIsHeart()){
+            uid = 0L;
+        } else {
+            uid = 1L;
+        }
         return uid;
     }
 }
