@@ -2,6 +2,7 @@ package com.team3.musicpicky.service;
 
 import com.team3.musicpicky.controller.request.CreatePostRequestDto;
 import com.team3.musicpicky.controller.request.UpdatePostRequestDto;
+import com.team3.musicpicky.controller.response.PostDetailResponseDto;
 import com.team3.musicpicky.controller.response.PostResponseDto;
 import com.team3.musicpicky.domain.Post;
 import com.team3.musicpicky.domain.PostLike;
@@ -45,7 +46,7 @@ public class PostService {
         return postRepository.save(createPostRequestDto.toPost(imageUrl));
     }
 
-    public PostResponseDto getPost(Long postId, HttpServletRequest request) {
+    public PostDetailResponseDto getPost(Long postId, HttpServletRequest request) {
          User user = validateUser(request);
 
         //로그인 정보가 없을때 (Refresh-Token == null) uid값 설정
@@ -53,7 +54,7 @@ public class PostService {
              Long uid = -1L;
              Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
 
-             return PostResponseDto.builder()
+             return PostDetailResponseDto.builder()
                      .post(post)
                      .uid(uid)
                      .build();
@@ -65,7 +66,7 @@ public class PostService {
         //로그인 정보가 있을 때 (Refresh-Token != null) 좋아요 했는지 확인해 uid값 설정
         Long uid = uidCheck(post, user);
 
-        return PostResponseDto.builder()
+        return PostDetailResponseDto.builder()
                 .post(post)
                 .uid(uid)
                 .build();
