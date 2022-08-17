@@ -24,6 +24,7 @@ public class CommentService {
         return commentRepository.save(
                 Comment.builder()
                         .user(commentRequestDto.getUser())
+                        .post(post)
                         .comment(commentRequestDto.getComment())
                         .build());
     }
