@@ -8,5 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 public class PostLikeResponseDto {
     private Boolean isLike;
+    private Long likeCnt;
 
 }
