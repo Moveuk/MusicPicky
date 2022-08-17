@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @RequestMapping(path = "/api/posts")
 @RequiredArgsConstructor
@@ -31,9 +33,9 @@ public class PostController {
     }
 
     @GetMapping(path = "/{postId}")
-    public ResponseEntity<ResponseDto> getPost(@PathVariable Long postId) {
+    public ResponseEntity<ResponseDto> getPost(@PathVariable Long postId, HttpServletRequest request) {
         return new ResponseEntity<>(
-                ResponseDto.success(postService.getPost(postId)), HttpStatus.valueOf(HttpStatus.OK.value()));
+                ResponseDto.success(postService.getPost(postId,request)), HttpStatus.valueOf(HttpStatus.OK.value()));
     }
 
     @GetMapping
