@@ -29,27 +29,28 @@ public class CommentService {
     }
 
     public Comment updateComment(CommentRequestDto commentRequestDto, Long postId, Long commentId, Long userId) {
-        Post post = postRepository.findById(postId).orElseThrow(()-> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
-        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new InvalidValueException(ErrorCode.COMMENT_NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new InvalidValueException(ErrorCode.COMMENT_NOT_FOUND));
 
         Long writerId = comment.getUser().getUserId();
 
         if (Objects.equals(writerId, userId)) {
             comment.updateComment(commentRequestDto);
-        }else{
+        } else {
             throw new InvalidValueException(ErrorCode.COMMENT_UNAUTHORIZED);
         }
         return comment;
     }
+
     public String deleteComment(Long postId, Long commentId, Long userId) {
-        Post post = postRepository.findById(postId).orElseThrow(()-> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
-        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new InvalidValueException(ErrorCode.COMMENT_NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new InvalidValueException(ErrorCode.COMMENT_NOT_FOUND));
 
         Long writerId = comment.getUser().getUserId();
 
         if (Objects.equals(writerId, userId)) {
             commentRepository.deleteById(commentId);
-        }else{
+        } else {
             throw new InvalidValueException(ErrorCode.COMMENT_UNAUTHORIZED);
         }
         return "댓글 삭제";
