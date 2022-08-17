@@ -1,7 +1,8 @@
 package com.team3.musicpicky.domain;
 
-import jdk.jfr.BooleanFlag;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -16,6 +17,7 @@ public class PostLike {
     private Long postLikeId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "postId", nullable = false)
     private Post post;
 
