@@ -1,11 +1,13 @@
 package com.team3.musicpicky.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @Entity
@@ -43,6 +45,10 @@ public class Post extends Timestamped{
 
     @Column(nullable = false)
     private Long likeCnt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<Comment> commentList;
 
     @Getter
     @AllArgsConstructor
