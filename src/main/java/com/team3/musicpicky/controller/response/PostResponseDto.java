@@ -46,10 +46,9 @@ public class PostResponseDto {
 
     private List<CommentDto> commentList;
     
-    private Long uid;
     
     @Builder
-    public PostResponseDto(Post post, Long uid) {
+    public PostResponseDto(Post post) {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.user = post.getUser();
@@ -60,6 +59,5 @@ public class PostResponseDto {
         this.videoUrl = post.getVideoUrl();
         this.likeCnt = post.getLikeCnt();
         this.commentList = post.getCommentList().stream().map(comment -> CommentDto.builder().commentAs(comment).userDto(new UserDto(comment.getUser())).build()).collect(Collectors.toList());
-        this.uid = uid;
     }
 }
