@@ -39,9 +39,9 @@ public class PostResponseDto {
     private String videoUrl;
 
     private Long likeCnt;
-
+    private Long uid;
     @Builder
-    public PostResponseDto(Post post) {
+    public PostResponseDto(Post post, Long uid) {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.user = post.getUser();
@@ -51,5 +51,6 @@ public class PostResponseDto {
         this.imageUrl = post.getImageUrl();
         this.videoUrl = post.getVideoUrl();
         this.likeCnt = post.getLikeCnt();
+        this.uid = uid;
     }
 }

@@ -4,9 +4,13 @@ import com.team3.musicpicky.controller.request.CreatePostRequestDto;
 import com.team3.musicpicky.controller.request.UpdatePostRequestDto;
 import com.team3.musicpicky.controller.response.PostResponseDto;
 import com.team3.musicpicky.domain.Post;
+import com.team3.musicpicky.domain.PostLike;
+import com.team3.musicpicky.domain.User;
 import com.team3.musicpicky.domain.UserDetailsImpl;
 import com.team3.musicpicky.exception.InvalidValueException;
 import com.team3.musicpicky.global.error.ErrorCode;
+import com.team3.musicpicky.jwt.TokenProvider;
+import com.team3.musicpicky.repository.PostLikeRepository;
 import com.team3.musicpicky.repository.PostRepository;
 import com.team3.musicpicky.s3.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +18,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +30,8 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final S3Service s3Service;
+    private final TokenProvider tokenProvider;
+    private final PostLikeRepository postLikeRepository;
 
     public Post createPost(CreatePostRequestDto createPostRequestDto) {
 
@@ -37,11 +45,29 @@ public class PostService {
         return postRepository.save(createPostRequestDto.toPost(imageUrl));
     }
 
-    public PostResponseDto getPost(Long postId) {
+    public PostResponseDto getPost(Long postId, HttpServletRequest request) {
+         User user = validateUser(request);
+
+        //로그인 정보가 없을때 (Refresh-Token == null) uid값 설정
+        if (user == null) {
+             Long uid = -1L;
+             Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
+
+             return PostResponseDto.builder()
+                     .post(post)
+                     .uid(uid)
+                     .build();
+        }
+
         // 포스트 아이디로 조회.
         Post post = postRepository.findById(postId).orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
+
+        //로그인 정보가 있을 때 (Refresh-Token != null) 좋아요 했는지 확인해 uid값 설정
+        Long uid = uidCheck(post, user);
+
         return PostResponseDto.builder()
                 .post(post)
+                .uid(uid)
                 .build();
     }
 
@@ -113,5 +139,24 @@ public class PostService {
         //s3 버킷에서 기존 사진 삭제
         s3Service.deleteObjectByImageUrl(post.getImageUrl());
         return "<" + post.getTitle() + "> 게시글이 삭제되었습니다.";
+    }
+    @Transactional
+    public User validateUser(HttpServletRequest request) {
+        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
+            return null;
+        }
+        return tokenProvider.getUserFromAuthentication();
+    }
+
+    @Transactional
+    public Long uidCheck(Post post, User user) {
+        Optional<PostLike> postLike = postLikeRepository.findByPostAndUser(post, user);
+        Long uid;
+        if (postLike.isEmpty() || !postLike.get().getIsHeart()){
+            uid = 0L;
+        } else {
+            uid = 1L;
+        }
+        return uid;
     }
 }
