@@ -44,7 +44,7 @@ public class PostDto {
 
     private LocalDateTime modifiedAt;
 
-    @Builder
+
     public PostDto(Post post, UserDto userDto) {
         this.postId = post.getPostId();
         this.title = post.getTitle();
