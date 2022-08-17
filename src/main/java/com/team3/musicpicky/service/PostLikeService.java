@@ -69,6 +69,7 @@ public class PostLikeService {
             return ResponseDto.success(
                     PostLikeResponseDto.builder()
                             .isLike(true)
+                            .likeCnt(chkLike(post))
                             .build()
             );
         }
@@ -78,6 +79,7 @@ public class PostLikeService {
         return ResponseDto.success(
                 PostLikeResponseDto.builder()
                         .isLike(false)
+                        .likeCnt(chkLike(post))
                         .build()
         );
     }
