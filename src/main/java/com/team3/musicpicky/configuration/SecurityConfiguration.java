@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 
 @Configuration
 @EnableWebSecurity
@@ -65,6 +66,7 @@ public class SecurityConfiguration {
 
                 .and()
                 .authorizeRequests()
+                .requestMatchers(request -> CorsUtils.isPreFlightRequest(request)).permitAll()
                 .antMatchers("/h2-console/**").permitAll()  //h2-console 해제
                 .antMatchers("/api/users/**").permitAll()   //signup, login 해제
                 .antMatchers(HttpMethod.GET, "/api/posts").permitAll()  //게시글 목록 조회 해제

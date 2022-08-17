@@ -20,7 +20,7 @@ public class CorsConfig {
         configuration.addAllowedMethod("*"); //모든 HTTP Method, get, post, put 등등 접속 허용.
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 

@@ -1,22 +1,16 @@
 package com.team3.musicpicky.service;
 
 import com.team3.musicpicky.controller.request.CommentRequestDto;
-import com.team3.musicpicky.controller.response.PostResponseDto;
 import com.team3.musicpicky.domain.Comment;
 import com.team3.musicpicky.domain.Post;
-import com.team3.musicpicky.domain.UserDetailsImpl;
 import com.team3.musicpicky.exception.InvalidValueException;
 import com.team3.musicpicky.global.error.ErrorCode;
 import com.team3.musicpicky.repository.CommentRepository;
 import com.team3.musicpicky.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
