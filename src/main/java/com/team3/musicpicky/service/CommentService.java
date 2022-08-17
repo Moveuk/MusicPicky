@@ -1,7 +1,6 @@
 package com.team3.musicpicky.service;
 
 import com.team3.musicpicky.controller.request.CommentRequestDto;
-import com.team3.musicpicky.controller.response.CommentResponseDto;
 import com.team3.musicpicky.controller.response.PostResponseDto;
 import com.team3.musicpicky.domain.Comment;
 import com.team3.musicpicky.domain.Post;
