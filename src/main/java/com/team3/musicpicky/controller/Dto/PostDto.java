@@ -1,5 +1,6 @@
 package com.team3.musicpicky.controller.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team3.musicpicky.domain.Post;
 import com.team3.musicpicky.domain.User;
@@ -40,8 +41,10 @@ public class PostDto {
 
     private Long likeCnt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedAt;
 
 

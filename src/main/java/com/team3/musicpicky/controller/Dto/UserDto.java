@@ -1,5 +1,6 @@
 package com.team3.musicpicky.controller.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.team3.musicpicky.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,9 @@ import java.time.LocalDateTime;
 public class UserDto {
     private Long id;
     private String username;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedAt;
 
     public UserDto(User user) {
