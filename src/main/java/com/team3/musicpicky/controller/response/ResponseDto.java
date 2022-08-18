@@ -1,5 +1,6 @@
 package com.team3.musicpicky.controller.response;
 
+import com.team3.musicpicky.global.error.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,21 +9,15 @@ import lombok.Getter;
 public class ResponseDto<T> {
   private boolean success;
   private T data;
-  private Error error;
+  private ErrorCode errorCode;
 
   public static <T> ResponseDto<T> success(T data) {
-    return new ResponseDto<>(true, data, null);
+    return new ResponseDto<>(true, data, ErrorCode.SUCCESS);
   }
 
-  public static <T> ResponseDto<T> fail(String code, String message) {
-    return new ResponseDto<>(false, null, new Error(code, message));
+  public static <T> ResponseDto<T> fail(ErrorCode errorCode) {
+    return new ResponseDto<>(false, null, errorCode);
   }
 
-  @Getter
-  @AllArgsConstructor
-  static class Error {
-    private String code;
-    private String message;
-  }
 
 }

@@ -5,6 +5,7 @@ import com.team3.musicpicky.controller.response.ResponseDto;
 import com.team3.musicpicky.domain.RefreshToken;
 import com.team3.musicpicky.domain.User;
 import com.team3.musicpicky.domain.UserDetailsImpl;
+import com.team3.musicpicky.global.error.ErrorCode;
 import com.team3.musicpicky.repository.RefreshTokenRepository;
 import com.team3.musicpicky.shared.Authority;
 import io.jsonwebtoken.*;
@@ -93,7 +94,7 @@ public class TokenProvider {
 //    return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 //  }
 
-  public User getMemberFromAuthentication() {
+  public User getUserFromAuthentication() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null || AnonymousAuthenticationToken.class.
         isAssignableFrom(authentication.getClass())) {
@@ -113,7 +114,7 @@ public class TokenProvider {
     } catch (UnsupportedJwtException e) {
       log.info("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
     } catch (IllegalArgumentException e) {
-      log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+      log.info("JWT claims is empty, 로그인 정보가 없습니다.");
     }
     return false;
   }
@@ -136,7 +137,7 @@ public class TokenProvider {
   public ResponseDto<?> deleteRefreshToken(User user) {
     RefreshToken refreshToken = isPresentRefreshToken(user);
     if (null == refreshToken) {
-      return ResponseDto.fail("TOKEN_NOT_FOUND", "존재하지 않는 Token 입니다.");
+      return ResponseDto.fail(ErrorCode.TOKEN_NOT_FOUND);
     }
 
     refreshTokenRepository.delete(refreshToken);

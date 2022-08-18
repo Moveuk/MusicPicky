@@ -2,6 +2,7 @@ package com.team3.musicpicky.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team3.musicpicky.controller.response.ResponseDto;
+import com.team3.musicpicky.global.error.ErrorCode;
 import com.team3.musicpicky.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -35,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
   public static String AUTHORIZATION_HEADER = "Authorization";
   public static String BEARER_PREFIX = "Bearer ";
 
-  public static String AUTHORITIES_KEY = "team3MusicPicky";
+  public static String AUTHORITIES_KEY = "auth";
 
   private final String SECRET_KEY;
 
@@ -62,7 +63,7 @@ public class JwtFilter extends OncePerRequestFilter {
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().println(
             new ObjectMapper().writeValueAsString(
-                ResponseDto.fail("BAD_REQUEST", "Token이 유효햐지 않습니다.")
+                ResponseDto.fail(ErrorCode.INVALID_TOKEN)
             )
         );
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
