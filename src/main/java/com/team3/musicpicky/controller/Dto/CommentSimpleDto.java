@@ -12,11 +12,15 @@ import lombok.Getter;
 public class CommentSimpleDto {
 
     private Long userId;
+    private String username;
+    private Long commentId;
     private String comment;
 
     @Builder
     public CommentSimpleDto(Comment commentAs) {
         this.userId = commentAs.getUser().getUserId();
+        this.username = commentAs.getUser().getUsername();
+        this.commentId = commentAs.getCommentId();
         this.comment = commentAs.getComment();
     }
 
